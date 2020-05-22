@@ -1,2 +1,34 @@
 # oxiquant
 Automated analysis of mass spectrometry data collected during hydroxyl radical footprinting experiment
+
+## Description
+`oxiquant` is a pipeline for quantitative proteomics that executes 
+[MS-GF+](https://github.com/MSGFPlus/msgfplus) 
+MS2 search engine for peptides identification, 
+[`mzcharge`](https://github.com/nktvslv/mzcharge) to extract 
+intensity signal from MS1 spectra and maps identified peptides and their possible oxidated variants to extracted ion current.
+
+## Installation
+To run MS-GF+ [Java](https://www.java.com/en/download/manual.jsp)
+runtime has to be installed.
+
+```R
+# CRAN packages
+install.packages(c("data.table","future","future.apply","tydir"))
+
+# Bioconductor packages
+# Bioconductor packages
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("mzID","mzR"))
+```
+On Windows install Rtools from [CRAN](https://cran.r-project.org) to 
+compile C++ code in `mzcharge`
+
+```R
+# Install mzcharge from Github
+if (!requireNamespace("devtools", quietly=TRUE))
+    install.packages("devtools")
+devtools::install_github("https://github.com/nktvslv/mzcharge.git")
+```
+
