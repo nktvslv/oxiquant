@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590162376048.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "452531208",
+    "id" : "6EAB36A",
+    "lastKnownWriteTime" : 1590162348,
+    "last_content_update" : 1590162348,
+    "path" : "/Volumes/obelix/coding/rlang/oxiquant/R/oxiquant.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "28,55",
+        "scrollLine" : "12"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

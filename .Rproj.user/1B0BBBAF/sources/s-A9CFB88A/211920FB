@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590091861514.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "211920FB",
+    "lastKnownWriteTime" : 1590094120,
+    "last_content_update" : 1590094120626,
+    "path" : "/Volumes/obelix/coding/rlang/oxiquantr/R/extract_ms1.R",
+    "project_path" : "R/extract_ms1.R",
+    "properties" : {
+        "cursorPosition" : "22,64",
+        "scrollLine" : "8"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
