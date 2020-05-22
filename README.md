@@ -31,5 +31,12 @@ if (!requireNamespace("devtools", quietly=TRUE))
 devtools::install_github("https://github.com/nktvslv/mzcharge.git")
 ```
 
+Install oxiquant
+```R
+if (!requireNamespace("devtools", quietly=TRUE))
+    install.packages("devtools")
+devtools::install_github("https://github.com/nktvslv/oxiquant.git")
+```
+
 `oxiquant` is bundled with MS-GF+ release 2020.03.14 that will be downloaded
 during first execution of the pipeline and installed in package directory.
