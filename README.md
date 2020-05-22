@@ -14,9 +14,8 @@ runtime has to be installed.
 
 ```R
 # CRAN packages
-install.packages(c("data.table","future","future.apply","tydir"))
+install.packages(c("data.table","future","future.apply","tidyr"))
 
-# Bioconductor packages
 # Bioconductor packages
 if (!requireNamespace("BiocManager", quietly=TRUE))
     install.packages("BiocManager")
@@ -32,3 +31,5 @@ if (!requireNamespace("devtools", quietly=TRUE))
 devtools::install_github("https://github.com/nktvslv/mzcharge.git")
 ```
 
+`oxiquant` is bundled with MS-GF+ release 2020.03.14 that will be downloaded
+during first execution of the pipeline and installed in package directory.
