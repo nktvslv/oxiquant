@@ -179,8 +179,8 @@ oxiquant <- function(msgf = FALSE,
 
     # keep centroids around peak of elution -/+ left and right thresholds
     rt_left <- getOption("xic.rt_left", 0.5)
-    rt_right <- getOption("xic.rt_rigth", 0.5)
-    peptides <- peptides[retention_time > ms1peak - rt_left & retention_time < ms1peak + rt_right]
+    rt_right <- getOption("xic.rt_right", 0.5)
+    peptides <- peptides[(retention_time > (ms1peak - rt_left)) & (retention_time < (ms1peak + rt_right))]
 
     # save quantified peptides on disk and in global env
     fwrite(x = peptides, file = "peptides.csv")
