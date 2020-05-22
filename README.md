@@ -12,6 +12,7 @@ intensity signal from MS1 spectra and maps identified peptides and their possibl
 To run MS-GF+ [Java](https://www.java.com/en/download/manual.jsp)
 runtime has to be installed.
 
+R dependencies from CRAN and Bioconductor
 ```R
 # CRAN packages
 install.packages(c("data.table","future","future.apply","tidyr"))
@@ -24,14 +25,14 @@ BiocManager::install(c("mzID","mzR"))
 On Windows install Rtools from [CRAN](https://cran.r-project.org) to 
 compile C++ code in `mzcharge`
 
+Install `mzcharge`
 ```R
-# Install mzcharge from Github
 if (!requireNamespace("devtools", quietly=TRUE))
     install.packages("devtools")
 devtools::install_github("https://github.com/nktvslv/mzcharge.git")
 ```
 
-Install oxiquant
+Install `oxiquant`
 ```R
 if (!requireNamespace("devtools", quietly=TRUE))
     install.packages("devtools")
