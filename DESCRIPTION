@@ -16,6 +16,4 @@ Imports:
     mzR,
     tidyr,
     mzcharge,
-    data.table,
-    future,
-    future.apply
+    data.table

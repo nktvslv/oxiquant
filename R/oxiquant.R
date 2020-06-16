@@ -8,15 +8,13 @@
 #' writes corresponding CVS files in working directory
 #' @export
 #' @import data.table
-#' @import future
-#' @import future.apply
 #'
 oxiquant <- function(msgf = FALSE,
                      process_ms1 = FALSE,
                      extract_ion_current = TRUE) {
 
   # set multicore processing
-  plan(multisession)
+  setDTthreads(threads = 0)
 
   if (msgf) {
 
@@ -36,9 +34,9 @@ oxiquant <- function(msgf = FALSE,
 
     # combine fasta files in current directory
     fasta_files <- list.files(pattern = "\\.fasta$")
-    fasta_records <- paste0(unlist(future_mapply(FUN = readChar,
-                                                 fasta_files, file.size(fasta_files),
-                                                 SIMPLIFY = F)), collapse = "\n")
+    fasta_records <- paste0(unlist(mapply(FUN = readChar,
+                                          fasta_files, file.size(fasta_files),
+                                          SIMPLIFY = F)), collapse = "\n")
     writeChar(object = fasta_records, con = "_proteins.fasta")
 
     # make sure _modifications.txt file for msgf is present
@@ -71,7 +69,7 @@ oxiquant <- function(msgf = FALSE,
     if (length(psms_files) == 0) {
       stop("No mzid files found in working directory")
     }
-    psms <- rbindlist(future_lapply(X = psms_files, FUN = read_mzid))
+    psms <- rbindlist(lapply(X = psms_files, FUN = read_mzid))
     fwrite(x = psms, file = "psms_all.csv") # write all unfiltered psms
     psms_all <<- psms
 
@@ -83,7 +81,7 @@ oxiquant <- function(msgf = FALSE,
     psms[,`:=`(ms2ioncurrent = as.numeric(ms2ioncurrent),
                isotopeerror = as.numeric(isotopeerror))]
     psms[,experimentalmasstocharge := experimentalmasstocharge - isotopeerror / chargestate]
-    psms <- psms[, .(ms2mz = median(experimentalmasstocharge[isotopeerror==0]),
+    psms <- psms[, .(ms2mz = median(experimentalmasstocharge),
                      ms2rt = weighted.mean(x = `scan start time`, w = ms2ioncurrent)),
                  by = .(accession, description, start, end, pepseq, chargestate, modification)]
     psms <- psms[rep(1:.N, each = num_oxi + 1)]
@@ -114,7 +112,7 @@ oxiquant <- function(msgf = FALSE,
 
       # filter ms1 by charge and monoisotopic peak
       ms1 <- fread(ms1file)
-      ms1 <- ms1[charge >= min_charge]
+      ms1 <- ms1[charge >= min_charge & charge <= max_charge] 
 
       # function to match psms charge, mz and rt to ms1 centroids
       filter_centroids <- function(ms2ch, ms2mz, ms2rt, mz_tol, rt_range) {
@@ -124,10 +122,10 @@ oxiquant <- function(msgf = FALSE,
       }
 
       # extract ion current for each psms
-      peptides <- psms[,intensity := future_mapply(FUN = filter_centroids,
-                                                   chargestate, ms2mz, ms2rt,
-                                                   MoreArgs = list(mz_tol, rt_range),
-                                                   USE.NAMES = T, SIMPLIFY = F)]
+      peptides <- psms[,intensity := mapply(FUN = filter_centroids,
+                                            chargestate, ms2mz, ms2rt,
+                                            MoreArgs = list(mz_tol, rt_range),
+                                            USE.NAMES = T, SIMPLIFY = F)]
 
       # unnest ms1 data
       peptides <- tidyr::unnest(peptides, intensity)
@@ -140,7 +138,7 @@ oxiquant <- function(msgf = FALSE,
     peptides <- rbindlist(lapply(X = ms1_files, FUN = find_ms1))
 
     # calculated mz errors and remove duplicates
-    peptides[, mz_err := abs(mz - ms2mz) / (mz + ms2mz) * 2e6]
+    peptides[,mz_err := abs(mz - ms2mz) / (mz + ms2mz) * 2e6]
     peptides <- peptides[peptides[,.I[which.min(mz_err)], by=.(uid, ms1file)]$V1]
 
     # save all found scans to global env
@@ -149,9 +147,9 @@ oxiquant <- function(msgf = FALSE,
     # filter by number of scans and max allowed gap
     min_scans <- getOption("xic.min_scans", 5L)
     max_gap <- getOption("xic.max_gap", 1L)
-    peptides[, ms1left_gap := scan_order - shift(scan_order, type = "lag", fill = NA_real_) - 1,
+    peptides[,ms1left_gap := scan_order - shift(scan_order, type = "lag", fill = NA_real_) - 1,
              by = .(accession, description, start, end, pepseq, chargestate, modification, n_oxi, ms1file)]
-    peptides[, ms1right_gap := shift(scan_order, type = "lead", fill = NA_real_) - scan_order - 1,
+    peptides[,ms1right_gap := shift(scan_order, type = "lead", fill = NA_real_) - scan_order - 1,
              by = .(accession, description, start, end, pepseq, chargestate, modification, n_oxi, ms1file)]
     peptides <- peptides[ms1left_gap <= max_gap | ms1right_gap <= max_gap]
     peptides <- peptides[peptides[,.I[.N >= min_scans],

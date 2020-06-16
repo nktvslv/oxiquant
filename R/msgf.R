@@ -50,7 +50,7 @@ run_msgf <- function(mzml) {
     system(command)
 }
 
-read_mzid <- function(file) {
-    mzid <- mzID::mzID(file)
+read_mzid <- function(mzid_file) {
+    mzid <- mzID::mzID(mzid_file)
     mzID::flatten(mzid)
 }
