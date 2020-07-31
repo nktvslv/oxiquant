@@ -115,17 +115,19 @@ oxiquant <- function(msgf = FALSE,
       ms1 <- ms1[charge >= min_charge & charge <= max_charge] 
 
       # function to match psms charge, mz and rt to ms1 centroids
-      filter_centroids <- function(ms2ch, ms2mz, ms2rt, mz_tol, rt_range) {
-        ms1[charge == ms2ch &
-              abs(mz - ms2mz) / (mz + ms2mz) * 2e6 < mz_tol &
-              abs(retention_time - ms2rt) < rt_range]
-      }
+      # filter_centroids <- function(ms2ch, ms2mz, ms2rt, mz_tol, rt_range) {
+      #   ms1[charge == ms2ch &
+      #         abs(mz - ms2mz) / (mz + ms2mz) * 2e6 < mz_tol &
+      #         abs(retention_time - ms2rt) < rt_range]
+      # }
 
       # extract ion current for each psms
       peptides <- psms[,intensity := mapply(FUN = filter_centroids,
                                             chargestate, ms2mz, ms2rt,
-                                            MoreArgs = list(mz_tol, rt_range),
+                                            MoreArgs = list(ms1, mz_tol, rt_range),
                                             USE.NAMES = T, SIMPLIFY = F)]
+      
+      psms[,intensity := lapply(intensity, as.data.table)]
 
       # unnest ms1 data
       peptides <- tidyr::unnest(peptides, intensity)
