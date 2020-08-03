@@ -128,10 +128,10 @@ oxiquant <- function(msgf = FALSE,
       # }
 
       # extract ion current for each psms
-      peptides <- psms[,intensity := future_mapply(FUN = filter_centroids,
-                                                   chargestate, ms2mz, ms2rt,
-                                                   MoreArgs = list(ms1, mz_tol, rt_range),
-                                                   USE.NAMES = T, SIMPLIFY = F)]
+      peptides <- psms[,intensity := mapply(FUN = filter_centroids,
+                                            chargestate, ms2mz, ms2rt,
+                                            MoreArgs = list(ms1, mz_tol, rt_range),
+                                            USE.NAMES = T, SIMPLIFY = F)]
       
       psms[,intensity := lapply(intensity, as.data.table)]
 
