@@ -36,8 +36,8 @@ List filter_centroids(int ms2ch, double ms2mz, double ms2rt,
     
     for (int i = 0; i < data_size; ++i) {
         
-        if (charge[i] == ms2ch & mz[i] > mz_min & mz[i] < mz_max &
-            retention_time[i] > rt_min & retention_time[i] < rt_max) {
+        if (charge[i] == ms2ch && mz[i] > mz_min && mz[i] < mz_max &&
+            retention_time[i] > rt_min && retention_time[i] < rt_max) {
             
             mzf.emplace_back(mz[i]);
             chargef.emplace_back(charge[i]);
