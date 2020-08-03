@@ -5,6 +5,7 @@
 #' 
 #' @docType package
 #' @name oxiquant
+#' @useDynLib oxiquant
 #' 
 utils::globalVariables(c("uid","ms1file","psms_all","isdecoy","modification",
                          "ms-gf:qvalue","ms2ioncurrent","isotopeerror",

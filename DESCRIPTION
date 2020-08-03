@@ -15,6 +15,8 @@ Imports:
     mzID,
     mzR,
     tidyr,
+    future,
+    future.apply,
     mzcharge,
     data.table,
     Rcpp

@@ -2,6 +2,9 @@
 
 export(oxiquant)
 import(data.table)
+import(future)
+import(future.apply)
+importFrom(parallel,detectCores)
 importFrom(utils,download.file)
 importFrom(utils,unzip)
 useDynLib(oxiquant)

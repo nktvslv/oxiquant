@@ -8,13 +8,19 @@
 #' writes corresponding CVS files in working directory
 #' @export
 #' @import data.table
+#' @import future
+#' @import future.apply
+#' @importFrom parallel detectCores
 #'
 oxiquant <- function(msgf = FALSE,
                      process_ms1 = FALSE,
                      extract_ion_current = TRUE) {
 
-  # set multicore processing
+  # set multicore processing for data.table
   setDTthreads(threads = 0)
+  
+  # set multicore processing for future.apply
+  plan(multisession, workers = parallel::detectCores())
 
   if (msgf) {
 
@@ -69,7 +75,7 @@ oxiquant <- function(msgf = FALSE,
     if (length(psms_files) == 0) {
       stop("No mzid files found in working directory")
     }
-    psms <- rbindlist(lapply(X = psms_files, FUN = read_mzid))
+    psms <- rbindlist(future_lapply(X = psms_files, FUN = read_mzid))
     fwrite(x = psms, file = "psms_all.csv") # write all unfiltered psms
     psms_all <<- psms
 
@@ -122,10 +128,10 @@ oxiquant <- function(msgf = FALSE,
       # }
 
       # extract ion current for each psms
-      peptides <- psms[,intensity := mapply(FUN = filter_centroids,
-                                            chargestate, ms2mz, ms2rt,
-                                            MoreArgs = list(ms1, mz_tol, rt_range),
-                                            USE.NAMES = T, SIMPLIFY = F)]
+      peptides <- psms[,intensity := future_mapply(FUN = filter_centroids,
+                                                   chargestate, ms2mz, ms2rt,
+                                                   MoreArgs = list(ms1, mz_tol, rt_range),
+                                                   USE.NAMES = T, SIMPLIFY = F)]
       
       psms[,intensity := lapply(intensity, as.data.table)]
 
