@@ -77,7 +77,7 @@ oxiquant <- function(msgf = FALSE,
     }
     psms <- rbindlist(future_lapply(X = psms_files, FUN = read_mzid))
     fwrite(x = psms, file = "psms_all.csv") # write all unfiltered psms
-    psms_all <<- psms
+    .GlobalEnv$psms_all <- psms
 
     # filter psms and calculate mz for oxidized versions
     oxi_mass <- 15.99491
@@ -97,7 +97,7 @@ oxiquant <- function(msgf = FALSE,
 
     # save psms to global env and on disk
     fwrite(x = psms, file = "psms.csv")
-    psms <<- psms
+    .GlobalEnv$psms <- psms
 
     # extract ion current for psms from ms1.csv files
     ms1_files <- list.files(pattern = "\\.ms1\\.csv$")
@@ -128,10 +128,14 @@ oxiquant <- function(msgf = FALSE,
       # }
 
       # extract ion current for each psms
-      peptides <- psms[,intensity := future_mapply(FUN = filter_centroids,
-                                            chargestate, ms2mz, ms2rt,
-                                            MoreArgs = list(ms1, mz_tol, rt_range),
-                                            USE.NAMES = T, SIMPLIFY = F)]
+      # peptides <- psms[,intensity := future_mapply(FUN = filter_centroids,
+      #                                       chargestate, ms2mz, ms2rt,
+      #                                       MoreArgs = list(ms1, mz_tol, rt_range),
+      #                                       USE.NAMES = T, SIMPLIFY = F)]
+      
+      peptides <- psms[,intensity := filter_centroids(chargestate,
+                                                      ms2mz, ms2rt,
+                                                      ms1, mz_tol, rt_range)]
       
       psms[,intensity := lapply(intensity, as.data.table)]
 
@@ -150,7 +154,7 @@ oxiquant <- function(msgf = FALSE,
     peptides <- peptides[peptides[,.I[which.min(mz_err)], by=.(uid, ms1file)]$V1]
 
     # save all found scans to global env
-    peptides_all <<- peptides
+    .GlobalEnv$peptides_all <- peptides
 
     # filter by number of scans and max allowed gap
     min_scans <- getOption("xic.min_scans", 5L)
@@ -190,7 +194,7 @@ oxiquant <- function(msgf = FALSE,
 
     # save quantified peptides on disk and in global env
     fwrite(x = peptides, file = "peptides.csv")
-    peptides <<- peptides
+    .GlobalEnv$peptides <- peptides
 
     # calculate fraction of oxidation for peptides
     fractions <- peptides[,.(intensity = sum(intensity)),
@@ -201,7 +205,7 @@ oxiquant <- function(msgf = FALSE,
 
     # save fractions on disk and in global env
     fwrite(x = fractions, file = "fractions.csv")
-    fractions <<- fractions
+    .GlobalEnv$fractions <- fractions
 
   }
 }
