@@ -14,7 +14,6 @@ RoxygenNote: 7.1.1
 Imports:
     mzID,
     mzR,
-    tidyr,
     future,
     future.apply,
     mzcharge,

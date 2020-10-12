@@ -15,7 +15,7 @@ runtime has to be installed.
 R dependencies from CRAN and Bioconductor
 ```R
 # CRAN packages
-install.packages(c("data.table","future","future.apply","tidyr"))
+install.packages(c("data.table","future","future.apply"))
 
 # Bioconductor packages
 if (!requireNamespace("BiocManager", quietly=TRUE))

@@ -137,13 +137,13 @@ oxiquant <- function(msgf = FALSE,
                                                       ms2mz, ms2rt,
                                                       ms1, mz_tol, rt_range)]
       
-      psms[,intensity := lapply(intensity, as.data.table)]
+      #psms[,intensity := lapply(intensity, as.data.table)]
 
       # unnest ms1 data
-      peptides <- tidyr::unnest(peptides, intensity)
+      peptides <- unnest_dt(peptides, "intensity")
 
       # return
-      as.data.table(peptides)
+      #as.data.table(peptides)
     }
 
     # run find_ms1 for each .ms1.csv file in working directory

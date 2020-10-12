@@ -24,8 +24,8 @@ List filter_centroids(const NumericVector& ms2ch, const NumericVector& ms2mz,
     for (int i = 0; i < ms2ch.size(); ++i) {
         
         // conditions
-        double mz_min = ms2mz[i] - mz_tol * ms2mz[i] / 1e6;
-        double mz_max = ms2mz[i] + mz_tol * ms2mz[i] / 1e6;
+        double mz_min = ms2mz[i] - mz_tol * ms2mz[i] * 1e-6;
+        double mz_max = ms2mz[i] + mz_tol * ms2mz[i] * 1e-6;
         double rt_min = ms2rt[i] - rt_range;
         double rt_max = ms2rt[i] + rt_range;
         
