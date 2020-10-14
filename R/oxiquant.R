@@ -87,7 +87,7 @@ oxiquant <- function(msgf = FALSE,
     psms[,`:=`(ms2ioncurrent = as.numeric(ms2ioncurrent),
                isotopeerror = as.numeric(isotopeerror))]
     psms[,experimentalmasstocharge := experimentalmasstocharge - isotopeerror / chargestate]
-    psms <- psms[, .(ms2mz = median(experimentalmasstocharge),
+    psms <- psms[, .(ms2mz = mean(calculatedmasstocharge),
                      ms2rt = weighted.mean(x = `scan start time`, w = ms2ioncurrent)),
                  by = .(accession, description, start, end, pepseq, chargestate, modification)]
     psms <- psms[rep(1:.N, each = num_oxi + 1)]
@@ -114,7 +114,7 @@ oxiquant <- function(msgf = FALSE,
       min_charge <- getOption("xic.min_charge", 1L)
       max_charge <- getOption("xic.max_charge", 8L)
       mz_tol <- getOption("xic.mz_tol", 10.0)
-      rt_range <- getOption("xic.rt_range", 6.0)
+      rt_range <- getOption("xic.rt_range", 5.0)
 
       # filter ms1 by charge and monoisotopic peak
       ms1 <- fread(ms1file)

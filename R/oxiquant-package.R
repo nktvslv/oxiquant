@@ -11,7 +11,8 @@
 #' 
 utils::globalVariables(c("uid","ms1file","psms_all","isdecoy","modification",
                          "ms-gf:qvalue","ms2ioncurrent","isotopeerror",
-                         "experimentalmasstocharge","chargestate",".",
+                         "experimentalmasstocharge","calculatedmasstocharge",
+                         "chargestate",".",
                          "median","weighted.mean","scan start time","accession",
                          "description","start","end","pepseq","n_oxi","ms2mz",
                          "charge","mz","retention_time","intensity","ms2rt",

@@ -2,12 +2,17 @@ unnest_dt <- function(dt, col) {
     
     # check if only one column provided
     if (length(col) != 1L) {
-        stop("unnest can work with only one column")
+        stop("unnest can expand only one column at a time")
+    }
+    
+    # check if column exist
+    if (!col %in% names(dt)) {
+        stop("column ", col, " not found in ", dt)
     }
     
     # check if column is list
     if (typeof(dt[[col]]) != "list") {
-        stop("column ", col, " is not of a type list.")
+        stop("column ", col, " is not of a type list")
     }
     
     cols <- setdiff(names(dt), col)
