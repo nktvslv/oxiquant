@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 
 using namespace Rcpp;
-
+// [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::export]]
 List filter_centroids(const NumericVector& ms2ch, const NumericVector& ms2mz,
                       const NumericVector& ms2rt,

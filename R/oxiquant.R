@@ -82,7 +82,12 @@ oxiquant <- function(msgf = FALSE,
     # filter psms and calculate mz for oxidized versions
     oxi_mass <- 15.99491
     qval <- getOption("psms.qval", 0.01)
-    num_oxi <- getOption("psms.num_oxi", 3L)
+    num_oxi <- getOption("psms.num_oxi", 3L)# parameters for ms1 filtering
+    min_charge <- getOption("xic.min_charge", 1L)
+    max_charge <- getOption("xic.max_charge", 8L)
+    mz_tol <- getOption("xic.mz_tol", 10.0)
+    rt_range <- getOption("xic.rt_range", 5.0)
+    
     psms <- psms[!isdecoy & !grepl("15\\.99|31\\.98|47\\.98", modification) & `ms-gf:qvalue` < qval]
     psms[,`:=`(ms2ioncurrent = as.numeric(ms2ioncurrent),
                isotopeerror = as.numeric(isotopeerror))]
@@ -109,12 +114,6 @@ oxiquant <- function(msgf = FALSE,
     find_ms1 <- function(ms1file) {
 
       print(paste("extracting ion current from", ms1file))
-
-      # parameters for ms1 filtering
-      min_charge <- getOption("xic.min_charge", 1L)
-      max_charge <- getOption("xic.max_charge", 8L)
-      mz_tol <- getOption("xic.mz_tol", 10.0)
-      rt_range <- getOption("xic.rt_range", 5.0)
 
       # filter ms1 by charge and monoisotopic peak
       ms1 <- fread(ms1file)
