@@ -46,7 +46,7 @@ options(# selected parameters for MS-GF+. should always have quote around.
         
         # parameters for psms filtering and ion current extraction
         "psms.qval" = 0.01, # max q-value to consider true identification.
-        "psms.n_oxi" = 3, # max number of hydroxyl groups to consider.
+        "psms.num_oxi" = 3, # max number of hydroxyl groups to consider.
         "xic.min_charge" = 1, # min charge for ion current extraction.
         "xic.max_charge" = 8, # max charge for ion current extraction.
         "xic.min_scans" = 5, # min number of scans in elution peak.
