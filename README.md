@@ -1,5 +1,5 @@
 # oxiquant
-Automated analysis of mass spectrometry data collected during hydroxyl radical footprinting experiment
+Automated analysis of mass spectrometry data collected for hydroxyl radical footprinting experiment
 
 ## Description
 `oxiquant` is a pipeline for quantitative proteomics that executes 
